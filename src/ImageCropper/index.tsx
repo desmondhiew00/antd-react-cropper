@@ -31,7 +31,7 @@ interface ImageCropperProps {
   closable?: boolean;
   maskClosable?: boolean;
   width?: number;
-  bodyStyle: React.CSSProperties;
+  bodyStyle?: React.CSSProperties;
 }
 
 const maxZoom = 10;
