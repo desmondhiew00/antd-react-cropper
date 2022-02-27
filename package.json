@@ -1,7 +1,22 @@
 {
-  "private": true,
+  "private": false,
   "name": "antd-react-cropper",
-  "version": "0.0.1",
+  "description": "An image cropper for Ant Design Upload using React Cropper.",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "antd",
+    "ant-design",
+    "upload",
+    "image",
+    "crop",
+    "cropper",
+    "react-cropper"
+  ],
+  "version": "0.1.0",
+  "author": "desmondhiew <tamashizero00@gmail.com  > (https://github.com/desmondhiew)",
+  "homepage": "https://github.com/desmondhiew/antd-react-cropper",
+  "repository": "github.com:desmondhiew/antd-react-cropper.git",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
