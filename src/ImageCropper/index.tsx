@@ -17,6 +17,10 @@ interface ImageCropperProps {
   cancelText?: string;
   onCropped?: (file: UploadFile) => void;
   onCancel?: () => void;
+  zoomInButton?: (func: () => void) => React.ReactNode;
+  zoomOutButton?: (func: () => void) => React.ReactNode;
+  rotateLeftButton?: (func: () => void) => React.ReactNode;
+  rotateRightButton: (func: () => void) => React.ReactNode;
 
   // Preview
   previewMaxHeight?: number;
@@ -32,6 +36,7 @@ interface ImageCropperProps {
   maskClosable?: boolean;
   width?: number;
   bodyStyle?: React.CSSProperties;
+  customFooter?: ({ onCancel, onCrop }: { onCancel: () => void; onCrop: () => void }) => React.ReactNode;
 }
 
 const maxZoom = 10;
@@ -141,12 +146,16 @@ export const ImageCropper: React.FC<ImageCropperProps> = (props) => {
       visible={!!src}
       onCancel={onCancel}
       footer={
-        <div className="modal-footer">
-          <Button onClick={onCancel}>{props.cancelText}</Button>
-          <Button block type="primary" onClick={onCrop}>
-            {props.cropText}
-          </Button>
-        </div>
+        props.customFooter ? (
+          props.customFooter({ onCrop, onCancel })
+        ) : (
+          <div className="modal-footer">
+            <Button onClick={onCancel}>{props.cancelText}</Button>
+            <Button block type="primary" onClick={onCrop}>
+              {props.cropText}
+            </Button>
+          </div>
+        )
       }
     >
       <Row gutter={12}>
@@ -172,9 +181,13 @@ export const ImageCropper: React.FC<ImageCropperProps> = (props) => {
             )}
 
             <div className="slider-container">
-              <Button className="action-btn" type="link" onClick={onZoomOut}>
-                <span style={{ fontSize: 20 }}>-</span>
-              </Button>
+              {props.zoomOutButton ? (
+                props.zoomOutButton(onZoomOut)
+              ) : (
+                <Button className="action-btn" type="link" onClick={onZoomOut}>
+                  <span style={{ fontSize: 20 }}>-</span>
+                </Button>
+              )}
               <Slider
                 className="slider"
                 value={zoom}
@@ -182,15 +195,23 @@ export const ImageCropper: React.FC<ImageCropperProps> = (props) => {
                 max={maxZoom}
                 onChange={onZoomSlide}
               />
-              <Button className="action-btn" type="link" onClick={onZoomIn}>
-                <span style={{ fontSize: 20 }}>+</span>
-              </Button>
+              {props.zoomInButton ? (
+                props.zoomInButton(onZoomIn)
+              ) : (
+                <Button className="action-btn" type="link" onClick={onZoomIn}>
+                  <span style={{ fontSize: 20 }}>+</span>
+                </Button>
+              )}
             </div>
 
             <div className="slider-container">
-              <Button className="action-btn" type="link" onClick={onRotateLeft}>
-                <span style={{ fontSize: 15 }}>↺</span>
-              </Button>
+              {props.rotateLeftButton ? (
+                props.rotateLeftButton(onRotateLeft)
+              ) : (
+                <Button className="action-btn" type="link" onClick={onRotateLeft}>
+                  <span style={{ fontSize: 15 }}>↺</span>
+                </Button>
+              )}
               <div style={{ flex: 1 }} onDoubleClick={() => setRotate(0)}>
                 <Slider
                   className="slider"
@@ -200,9 +221,13 @@ export const ImageCropper: React.FC<ImageCropperProps> = (props) => {
                   onChange={setRotate}
                 />
               </div>
-              <Button className="action-btn" type="link" onClick={onRotateRight}>
-                <span style={{ fontSize: 15 }}>↻</span>
-              </Button>
+              {props.rotateRightButton ? (
+                props.rotateRightButton(onRotateRight)
+              ) : (
+                <Button className="action-btn" type="link" onClick={onRotateRight}>
+                  <span style={{ fontSize: 15 }}>↻</span>
+                </Button>
+              )}
             </div>
           </div>
         </Col>

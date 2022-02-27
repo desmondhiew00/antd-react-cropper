@@ -36,8 +36,28 @@ const ImageUploadInput = () => {
         <ImageCropper
           file={file}
           aspect={16 / 9}
+          zoomInButton={(func) => {
+            return <div onClick={func}>Plus</div>;
+          }}
+          zoomOutButton={(func) => {
+            return <div onClick={func}>Minus</div>;
+          }}
+          rotateLeftButton={(func) => {
+            return <div onClick={func}>Left</div>;
+          }}
+          rotateRightButton={(func) => {
+            return <div onClick={func}>Right</div>;
+          }}
           onCropped={(file) => {
             setFileList([file]);
+          }}
+          customFooter={({ onCrop, onCancel }) => {
+            return (
+              <div>
+                <div onClick={onCancel}>Close</div>
+                <div onClick={onCrop}>Done</div>
+              </div>
+            );
           }}
         />
       )}
