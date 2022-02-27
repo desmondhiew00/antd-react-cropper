@@ -20,7 +20,7 @@ interface ImageCropperProps {
   zoomInButton?: (func: () => void) => React.ReactNode;
   zoomOutButton?: (func: () => void) => React.ReactNode;
   rotateLeftButton?: (func: () => void) => React.ReactNode;
-  rotateRightButton: (func: () => void) => React.ReactNode;
+  rotateRightButton?: (func: () => void) => React.ReactNode;
 
   // Preview
   previewMaxHeight?: number;
@@ -36,7 +36,13 @@ interface ImageCropperProps {
   maskClosable?: boolean;
   width?: number;
   bodyStyle?: React.CSSProperties;
-  customFooter?: ({ onCancel, onCrop }: { onCancel: () => void; onCrop: () => void }) => React.ReactNode;
+  customFooter?: ({
+    onCancel,
+    onCrop,
+  }: {
+    onCancel: () => void;
+    onCrop: () => void;
+  }) => React.ReactNode;
 }
 
 const maxZoom = 10;
