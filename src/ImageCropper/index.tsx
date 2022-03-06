@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Divider, Slider } from 'antd';
+import { Row, Col, Divider, Slider, message } from 'antd';
 import { Modal, Button, Grid } from 'antd';
 import Cropper from 'react-cropper';
 import { UploadFile } from 'antd/lib/upload/interface';
 import { RcFile } from 'antd/lib/upload';
 import './index.less';
+import { MessageType } from 'antd/lib/message';
 
 type ClassName = React.HTMLAttributes<any>['className'];
 interface ImageCropperProps {
@@ -21,6 +22,8 @@ interface ImageCropperProps {
   zoomOutButton?: (func: () => void) => React.ReactNode;
   rotateLeftButton?: (func: () => void) => React.ReactNode;
   rotateRightButton?: (func: () => void) => React.ReactNode;
+  showLoader?: boolean;
+  exportFileType?: string;
 
   // Preview
   previewMaxHeight?: number;
@@ -106,14 +109,18 @@ export const ImageCropper: React.FC<ImageCropperProps> = (props) => {
 
   const onCrop = () => {
     if (typeof cropper !== 'undefined') {
+      let loader: MessageType;
+      if (props.showLoader) loader = message.loading('Processing image...', 0);
+
       const cropped = cropper.getCroppedCanvas();
-      const thumbUrl = cropped.toDataURL();
+      const thumbUrl = cropped.toDataURL('image/jpeg');
       cropped.toBlob((blob) => {
         if (!blob) return;
         const newFile = new File([blob], file.name);
         const data: UploadFile = { ...file, thumbUrl, originFileObj: newFile as RcFile };
+        if (loader) loader();
         onCropped?.(data);
-      });
+      }, props.exportFileType);
     }
     setSrc(undefined);
   };
@@ -284,6 +291,8 @@ ImageCropper.defaultProps = {
   previewBackground: 'rgba(212, 212, 216)',
   cropText: 'Crop',
   cancelText: 'Cancel',
+  showLoader: true,
+  exportFileType: 'image/jpeg',
 };
 
 export default ImageCropper;
